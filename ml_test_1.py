@@ -1,13 +1,12 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import roc_curve, classification_report, confusion_matrix, accuracy_score
 
-from features import *
-from utils import drop_unnecessary_features
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeClassifier
-from utils import get_orderbook, get_messagebook, perform_grid_search
+from utils import get_orderbook, get_messagebook, perform_grid_search, drop_unnecessary_features
 import math
+import pandas as pd
 
 """
 ITCH parsing
