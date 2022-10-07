@@ -149,6 +149,99 @@ def get_messagebook(stock="GARAN", max_index="2020-08-05", resample_period="500L
 #     print(resampled.value_counts())
 #     sys.exit()
 
+def drop_highly_correlated_features(df, threshold=0.95):
+    # Create correlation matrix
+    corr_matrix = df.corr().abs()
+
+    # Select upper triangle of correlation matrix
+    upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(np.bool))
+
+    # Find index of feature columns with correlation greater than 0.95
+    to_drop = [column for column in upper.columns if any(upper[column] > threshold)]
+
+    # Drop features
+    df = df.drop(df[to_drop], axis=1)
+    # print("dropping highly correlated features", str(to_drop))
+    return df
+
+
+def drop_low_value_features(features, outcome):
+    corr = features.corrwith(outcome)
+    #corr.sort_values().plot.barh(color='blue', title='Strength of Correlation')
+    min_accepted_corr = -0.01
+    max_accepted_corr = 0.01
+    print('min accepted corr: ', min_accepted_corr)
+    correlated_features = corr[(corr > max_accepted_corr) | (corr < min_accepted_corr)].index.tolist()  # corr[corr > -99.0].index.tolist()
+    # corr_matrix = features[correlated_features].corr()
+    features = features[correlated_features]
+
+    # print(corr[(corr > max_accepted_corr) | (corr < min_accepted_corr)].sort_values())
+
+    # correlations_array = np.asarray(corr_matrix)
+    #
+    # linkage = hierarchy.linkage(distance.pdist(correlations_array), method='average')
+    # g = sns.clustermap(corr_matrix, row_linkage=linkage, col_linkage=linkage, row_cluster=True, col_cluster=True,
+    #                    cmap='Greens')
+    # plt.setp(g.ax_heatmap.yaxis.get_majorticklabels(), rotation=0)
+    # label_order = corr_matrix.iloc[:, g.dendrogram_row.reordered_ind].columns
+    # plt.show()
+
+    return features
+
+
+def drop_unnecessary_features(features, outcome, threshold):
+    """
+    drop_low_value_features, drop_highly_correlated_features fonksiyonlarının birleşimi
+    :param features:
+    :param outcome:
+    :param threshold:
+    :return:
+    """
+    # Drop low value features
+    corr = features.corrwith(outcome)
+    feature_corr = corr.abs().sort_values(ascending=False)
+
+    corr_matrix = features.corr().abs()
+
+    # Select upper triangle of correlation matrix
+    # upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(np.bool))
+
+    keep = []
+    to_drop = []
+    for i, feature in enumerate(feature_corr.index):
+        if i == 0:
+            keep.append(feature)
+            continue
+
+        highly_correlated_with = corr_matrix.loc[(corr_matrix[feature] > threshold)].index
+        # print(feature, highly_correlated_with)
+        # print(feature, keep)
+        intersect = list(set(highly_correlated_with).intersection(keep))
+        # print(feature, intersect)
+        # print('*'*20)
+        if len(intersect) >= 1:
+            to_drop.append(feature)
+        else:
+            keep.append(feature)
+        continue
+
+    # Find index of feature columns with correlation greater than 0.95
+    # to_drop = [column for column in feature_corr.index if any(upper[column] > threshold)]
+
+    # print(feature_corr)
+    # print(to_drop)
+    # print(keep)
+    # sys.exit()
+    # Drop features
+    df = features.drop(features[to_drop], axis=1)
+    # print(df.columns)
+    # print('Not dropping low_value_features')
+    # df = drop_low_value_features(df, outcome)
+    # print(df.columns)
+    # sys.exit()
+    # print("dropping highly correlated features", str(to_drop))
+    return df
+
 def perform_grid_search(X_data, y_data):
     parameters = {'max_depth': [2, 3, 4, 5],  # 10, 20],
                   'n_estimators': [1, 10, 25, 50, 100],  # , 1024, 2048],
