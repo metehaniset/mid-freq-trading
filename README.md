@@ -8,6 +8,14 @@ http://eugenezhulenev.com/blog/2014/11/14/stock-price-prediction-with-big-data-a
 
 https://trepo.tuni.fi/bitstream/handle/10024/117394/978-952-03-1288-6.pdf?sequence=5&isAllowed=y
 
+https://github.com/alpacahq
+
+https://github.com/alpacahq/example-scalping
+
+https://github.com/alpacahq/example-hftish
+
+http://jonathankinlay.com/2019/10/high-frequency-scalping-strategies/
+
 
 
 order-book-parsing
@@ -32,13 +40,5 @@ https://github.com/martinobdl/ITCH
 
 
 
-https://github.com/alpacahq
-
-https://github.com/alpacahq/example-scalping
-
-https://github.com/alpacahq/example-hftish
-
-
-http://jonathankinlay.com/2019/10/high-frequency-scalping-strategies/
 
 
