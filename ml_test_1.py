@@ -1,12 +1,12 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import roc_curve, classification_report, confusion_matrix, accuracy_score
 
-from machine_learning.lib.features import *
-from machine_learning.lib.utils import drop_unnecessary_features
+from features import *
+from utils import drop_unnecessary_features
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeClassifier
-from hft.lib.utils import get_orderbook, get_messagebook, perform_grid_search
+from utils import get_orderbook, get_messagebook, perform_grid_search
 import math
 
 """
